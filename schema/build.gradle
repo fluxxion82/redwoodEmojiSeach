@@ -1,0 +1,8 @@
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+dependencies {
+  api libs.redwood.schema
+  api libs.redwood.layout.schema
+  implementation libs.redwood.treehouse.lazylayout.schema
+  implementation project(":values")
+}

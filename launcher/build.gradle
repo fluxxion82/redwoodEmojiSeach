@@ -1,0 +1,24 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'com.android.library'
+apply plugin: 'app.cash.zipline'
+
+kotlin {
+  iosArm64()
+  iosX64()
+  iosSimulatorArm64()
+
+  android()
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation project(":presenter-treehouse")
+        api libs.redwood.treehouse
+      }
+    }
+  }
+}
+
+android {
+  namespace 'com.example.redwood.emojisearch.launcher'
+}

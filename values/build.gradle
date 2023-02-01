@@ -1,0 +1,24 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
+
+kotlin {
+  iosArm64()
+  iosX64()
+  iosSimulatorArm64()
+
+  js {
+    browser()
+  }
+  jvm()
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation libs.jetbrains.compose.runtime
+        implementation libs.kotlinx.serialization.core
+        api libs.redwood.treehouse
+        implementation libs.redwood.widget // 'app.cash.redwood:redwood-widget:0.3.0-SNAPSHOT'
+      }
+    }
+  }
+}

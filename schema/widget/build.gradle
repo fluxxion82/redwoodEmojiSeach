@@ -1,0 +1,31 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'app.cash.redwood.generator.widget'
+
+archivesBaseName = 'schema-widget'
+
+kotlin {
+  iosArm64()
+  iosX64()
+  iosSimulatorArm64()
+
+  js {
+    browser()
+  }
+
+  jvm()
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        api libs.redwood.layout.widget
+        api libs.redwood.treehouse.lazylayout.widget
+        api project(":values")
+      }
+    }
+  }
+}
+
+redwoodSchema {
+  source = project(":schema") // projects.samples.emojiSearch.schema
+  type = 'com.example.redwood.emojisearch.EmojiSearch'
+}

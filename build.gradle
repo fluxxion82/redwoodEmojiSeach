@@ -1,0 +1,130 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+
+buildscript {
+    dependencies {
+        classpath libs.kotlin.gradlePlugin
+        classpath libs.kotlin.serializationPlugin
+        classpath libs.jetbrains.compose.gradlePlugin
+        classpath libs.androidGradlePlugin
+        classpath libs.buildConfigPlugin
+        classpath libs.zipline.gradlePlugin
+        classpath libs.cklib.gradle.plugin
+        classpath 'app.cash.redwood:redwood-gradle-plugin:0.3.0-SNAPSHOT'
+    }
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        google()
+        gradlePluginPortal()
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+
+    group = project.property("GROUP") as String
+    version = project.property("VERSION_NAME") as String
+
+    plugins.withId('java-base') {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
+    }
+
+    if (project.path.startsWith(':redwood-')) {
+        plugins.withId('org.jetbrains.kotlin.jvm') {
+            kotlin {
+                explicitApi()
+            }
+        }
+
+        plugins.withId('org.jetbrains.kotlin.multiplatform') {
+            kotlin {
+                explicitApi()
+            }
+        }
+
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile).configureEach { task ->
+            // Only enable strict mode for non-test sources.
+            if (!task.name.toLowerCase().contains('test')) {
+                task.kotlinOptions {
+                    freeCompilerArgs += '-Xexplicit-api=strict'
+                }
+            }
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach { task ->
+        task.kotlinOptions {
+            freeCompilerArgs += [
+                    '-progressive', // https://kotlinlang.org/docs/whatsnew13.html#progressive-mode
+            ]
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile).configureEach { task ->
+        task.kotlinOptions {
+            jvmTarget = '1.8'
+            freeCompilerArgs += [
+                    '-Xjvm-default=all',
+            ]
+        }
+    }
+
+    // Disable the release linking tasks because we never need it for iOS sample applications.
+    // TODO Switch to https://youtrack.jetbrains.com/issue/KT-54424 when it is supported.
+    plugins.withId('org.jetbrains.kotlin.multiplatform') {
+        kotlin {
+            targets.withType(KotlinNativeTarget) {
+                binaries.all {
+                    if (it.buildType == NativeBuildType.RELEASE) {
+                        it.linkTask.enabled = false
+                    }
+                }
+            }
+        }
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask).configureEach {
+            if (it.name.contains("Release")) {
+                it.enabled = false
+            }
+        }
+    }
+
+    plugins.withType(com.android.build.gradle.BasePlugin).configureEach {
+        project.android {
+            compileSdk 33
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+            defaultConfig {
+                minSdk 21
+                targetSdk 33
+            }
+            lint {
+                checkDependencies true
+                checkReleaseBuilds false // Full lint runs as part of 'build' task.
+            }
+        }
+        android.composeOptions {
+            kotlinCompilerExtensionVersion libs.versions.androidxComposeCompiler.get()
+        }
+    }
+
+    // Disable the release build type because we never need it for sample applications.
+    plugins.withId('com.android.application') {
+        project.android {
+            variantFilter { variant ->
+                if (variant.buildType.name == 'release') {
+                    variant.ignore = true
+                }
+            }
+        }
+    }
+}
