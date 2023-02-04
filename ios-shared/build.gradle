@@ -1,0 +1,25 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'org.jetbrains.kotlin.native.cocoapods'
+
+kotlin {
+  iosArm64()
+  iosX64()
+  iosSimulatorArm64()
+
+  cocoapods {
+    noPodspec()
+    frameworkName = "EmojiSearchKt"
+  }
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation project(":launcher")
+        implementation project(":presenter-treehouse")
+        implementation project(":schema:widget:protocol")
+        implementation libs.redwood.layout.uiview
+        implementation libs.redwood.treehouse.lazylayout.uiview
+      }
+    }
+  }
+}

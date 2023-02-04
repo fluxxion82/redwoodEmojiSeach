@@ -1,0 +1,16 @@
+PODS:
+  - EmojiSearchKt (1.0)
+
+DEPENDENCIES:
+  - EmojiSearchKt (from `../ios-shared`)
+
+EXTERNAL SOURCES:
+  EmojiSearchKt:
+    :path: "../ios-shared"
+
+SPEC CHECKSUMS:
+  EmojiSearchKt: 2f620670f834a969675a11a8a80def083b5cf199
+
+PODFILE CHECKSUM: 62788f73308eccd2148887940a388226a1f4c82b
+
+COCOAPODS: 1.11.2

@@ -51,7 +51,7 @@ jetbrains-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "
 jetbrains-compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "jbCompose" }
 jetbrains-compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "jbCompose" }
 
-androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.2.0" }
+androidGradlePlugin = { module = "com.android.tools.build:gradle", version = "7.4.1" }
 kotlinPoet = { module = "com.squareup:kotlinpoet", version = "1.12.0" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version = "3.5.1" }
 junit = { module = "junit:junit", version = "4.13.2" }
@@ -80,10 +80,12 @@ redwood-layout-compose = { module = "app.cash.redwood:redwood-layout-compose", v
 redwood-layout-composeui = { module = "app.cash.redwood:redwood-layout-composeui", version.ref = "redwood" }
 redwood-widget-compose = { module = "app.cash.redwood:redwood-widget-compose", version.ref = "redwood" }
 redwood-layout-schema = { module = "app.cash.redwood:redwood-layout-schema", version.ref = "redwood" }
+redwood-layout-uiview = { module = "app.cash.redwood:redwood-layout-uiview", version.ref = "redwood" }
 redwood-layout-widget = { module = "app.cash.redwood:redwood-layout-widget", version.ref = "redwood" }
 redwood-treehouse-composeui = { module = "app.cash.redwood:redwood-treehouse-composeui", version.ref = "redwood" }
 redwood-treehouse-lazylayout-api = { module = "app.cash.redwood:redwood-treehouse-lazylayout-api", version.ref = "redwood" }
 redwood-treehouse-lazylayout-compose = { module = "app.cash.redwood:redwood-treehouse-lazylayout-compose", version.ref = "redwood" }
 redwood-treehouse-lazylayout-composeui = { module = "app.cash.redwood:redwood-treehouse-lazylayout-composeui", version.ref = "redwood" }
 redwood-treehouse-lazylayout-schema = { module = "app.cash.redwood:redwood-treehouse-lazylayout-schema", version.ref = "redwood" }
+redwood-treehouse-lazylayout-uiview = { module = "app.cash.redwood:redwood-treehouse-lazylayout-uiview", version.ref = "redwood" }
 redwood-treehouse-lazylayout-widget = { module = "app.cash.redwood:redwood-treehouse-lazylayout-widget", version.ref = "redwood" }

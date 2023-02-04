@@ -11,3 +11,4 @@ include(":presenter-treehouse")
 include(":launcher")
 
 include(":android-composeui")
+include(":ios-shared")
