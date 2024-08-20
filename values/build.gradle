@@ -17,7 +17,7 @@ kotlin {
         implementation libs.jetbrains.compose.runtime
         implementation libs.kotlinx.serialization.core
         api libs.redwood.treehouse
-        implementation libs.redwood.widget // 'app.cash.redwood:redwood-widget:0.3.0-SNAPSHOT'
+        implementation libs.redwood.widget
       }
     }
   }

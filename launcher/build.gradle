@@ -7,13 +7,16 @@ kotlin {
   iosX64()
   iosSimulatorArm64()
 
-  android()
+  androidTarget()
+
+  jvm()
 
   sourceSets {
     commonMain {
       dependencies {
-        implementation project(":presenter-treehouse")
-        api libs.redwood.treehouse
+        implementation project(":presenter-treehouse")// projects.samples.emojiSearch.presenterTreehouse
+        api libs.redwood.treehouse.host
+        api libs.zipline.loader
       }
     }
   }

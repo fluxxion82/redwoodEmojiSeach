@@ -18,7 +18,13 @@ package com.example.redwood.emojisearch.treehouse
 import app.cash.redwood.treehouse.AppService
 import app.cash.redwood.treehouse.ZiplineTreehouseUi
 import app.cash.zipline.ZiplineService
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
-interface EmojiSearchPresenter : AppService, ZiplineService {
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("EmojiSearchPresenter", exact = true)
+interface EmojiSearchPresenter :
+  AppService,
+  ZiplineService {
   fun launch(): ZiplineTreehouseUi
 }

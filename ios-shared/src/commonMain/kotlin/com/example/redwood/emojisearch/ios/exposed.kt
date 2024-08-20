@@ -17,32 +17,42 @@
 
 package com.example.redwood.emojisearch.ios
 
-import app.cash.redwood.LayoutModifier
+import app.cash.redwood.Modifier
 import app.cash.redwood.layout.uiview.UIViewRedwoodLayoutWidgetFactory
-import app.cash.redwood.treehouse.TreehouseUIKitView
+import app.cash.redwood.lazylayout.uiview.UIViewRedwoodLazyLayoutWidgetFactory
+import app.cash.redwood.treehouse.AppService
+import app.cash.redwood.treehouse.Content
+import app.cash.redwood.treehouse.TreehouseUIView
 import app.cash.redwood.treehouse.TreehouseView
-import app.cash.redwood.treehouse.lazylayout.uiview.UIViewRedwoodTreehouseLazyLayoutWidgetFactory
-import com.example.redwood.emojisearch.widget.EmojiSearchDiffConsumingNodeFactory
-import com.example.redwood.emojisearch.widget.EmojiSearchWidgetFactories
+import app.cash.redwood.treehouse.TreehouseView.WidgetSystem
+import app.cash.redwood.treehouse.bindWhenReady
+import com.example.redwood.emojisearch.protocol.host.EmojiSearchProtocolFactory
 import com.example.redwood.emojisearch.widget.EmojiSearchWidgetFactory
+import com.example.redwood.emojisearch.widget.EmojiSearchWidgetSystem
 import okio.ByteString
-import okio.toByteString
+import okio.ByteString.Companion.toByteString
+import okio.Closeable
 import platform.Foundation.NSData
 
 // Used to export types to Objective-C / Swift.
 fun exposedTypes(
   emojiSearchLauncher: EmojiSearchLauncher,
   emojiSearchWidgetFactory: EmojiSearchWidgetFactory<*>,
-  treehouseUIKitView: TreehouseUIKitView<*>,
+  protocolFactory: EmojiSearchProtocolFactory<*>,
+  treehouseUIView: TreehouseUIView,
   uiViewRedwoodLayoutWidgetFactory: UIViewRedwoodLayoutWidgetFactory,
-  uiViewRedwoodTreehouseLazyLayoutWidgetFactory: UIViewRedwoodTreehouseLazyLayoutWidgetFactory<*>,
-  widgetSystem: TreehouseView.WidgetSystem<*>,
-  widgetFactories: EmojiSearchWidgetFactories<*>,
-  diffConsumingNodeFactory: EmojiSearchDiffConsumingNodeFactory<*>,
+  uiViewRedwoodLazyLayoutWidgetFactory: UIViewRedwoodLazyLayoutWidgetFactory,
+  treehouseWidgetSystem: WidgetSystem<*>,
+  widgetSystem: EmojiSearchWidgetSystem<*>,
 ) {
   throw AssertionError()
 }
 
 fun byteStringOf(data: NSData): ByteString = data.toByteString()
 
-fun layoutModifier(): LayoutModifier = LayoutModifier
+fun modifier(): Modifier = Modifier
+
+fun <A : AppService> bindWhenReady(
+  content: Content,
+  view: TreehouseView<*>,
+): Closeable = content.bindWhenReady(view)

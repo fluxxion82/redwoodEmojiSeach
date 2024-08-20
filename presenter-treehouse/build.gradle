@@ -1,7 +1,9 @@
 apply plugin: 'org.jetbrains.kotlin.multiplatform'
-apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 apply plugin: 'app.cash.zipline'
-apply plugin: 'app.cash.redwood'
+
+//redwoodBuild {
+//  ziplineApplication('emoji-search')
+//}
 
 kotlin {
   iosArm64()
@@ -11,6 +13,8 @@ kotlin {
   jvm()
 
   js {
+    // The name of the JS module which needs to be unique within the repo.
+    moduleName = 'emoji-search-presenter-treehouse'
     browser()
     binaries.executable()
   }
@@ -18,26 +22,16 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api libs.okio
         api libs.redwood.treehouse
-        api libs.redwood.treehouse.lazylayout.compose
-        api libs.redwood.treehouse.lazylayout.api
       }
     }
 
     jsMain {
       dependencies {
+        api libs.redwood.treehouse.guest
         api project(":presenter")
-        implementation project(":schema:compose:protocol")
-      }
-    }
-
-    iosMain {
-      dependsOn(commonMain)
-    }
-    targets.all { target ->
-      // Some Kotlin targets do not have this property, but native ones always will.
-      if (target.hasProperty('platformType') && target.platformType.name == "native") {
-        target.compilations.main.defaultSourceSet.dependsOn(sourceSets.iosMain)
+        implementation project(":schema:protocol-guest")
       }
     }
   }

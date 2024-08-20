@@ -18,7 +18,8 @@ kotlin {
     commonMain {
       dependencies {
         api libs.redwood.layout.widget
-        api libs.redwood.treehouse.lazylayout.widget
+        api libs.redwood.lazylayout.widget
+        api project(":schema:modifiers")
         api project(":values")
       }
     }
@@ -26,6 +27,6 @@ kotlin {
 }
 
 redwoodSchema {
-  source = project(":schema") // projects.samples.emojiSearch.schema
+  source = project(":schema")
   type = 'com.example.redwood.emojisearch.EmojiSearch'
 }

@@ -1,23 +1,40 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
-buildscript {
-    dependencies {
-        classpath libs.kotlin.gradlePlugin
-        classpath libs.kotlin.serializationPlugin
-        classpath libs.jetbrains.compose.gradlePlugin
-        classpath libs.androidGradlePlugin
-        classpath libs.buildConfigPlugin
-        classpath libs.zipline.gradlePlugin
-        classpath libs.cklib.gradle.plugin
-        classpath 'app.cash.redwood:redwood-gradle-plugin:0.3.0-SNAPSHOT'
-    }
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        google()
-        gradlePluginPortal()
-    }
+//buildscript {
+//    dependencies {
+//        classpath libs.kotlin.gradlePlugin
+//        classpath libs.kotlin.serializationPlugin
+//        classpath libs.jetbrains.compose.gradlePlugin
+//        classpath libs.androidGradlePlugin
+//        classpath libs.buildConfigPlugin
+//        // classpath libs.zipline.gradlePlugin
+//        classpath libs.cklib.gradle.plugin
+//        classpath 'app.cash.redwood:redwood-gradle-plugin:0.13.0'
+//    }
+//    repositories {
+//        mavenCentral()
+//        mavenLocal()
+//        google()
+//        gradlePluginPortal()
+//    }
+//}
+
+plugins {
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.jetbrains.compose) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.cashapp.zipline) apply false
+    alias(libs.plugins.redwood.schema) apply false
+    alias(libs.plugins.redwood.generator.compose) apply false
+    alias(libs.plugins.redwood.modifiers) apply false
+    alias(libs.plugins.redwood.generator.protocol) apply false
+    alias(libs.plugins.redwood.generator.widget) apply false
 }
 
 allprojects {
@@ -70,7 +87,7 @@ allprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile).configureEach { task ->
         task.kotlinOptions {
-            jvmTarget = '1.8'
+            jvmTarget = '11'
             freeCompilerArgs += [
                     '-Xjvm-default=all',
             ]
@@ -98,14 +115,14 @@ allprojects {
 
     plugins.withType(com.android.build.gradle.BasePlugin).configureEach {
         project.android {
-            compileSdk 33
+            compileSdk 34
             compileOptions {
-                sourceCompatibility JavaVersion.VERSION_1_8
-                targetCompatibility JavaVersion.VERSION_1_8
+                sourceCompatibility JavaVersion.VERSION_11
+                targetCompatibility JavaVersion.VERSION_11
             }
             defaultConfig {
                 minSdk 21
-                targetSdk 33
+                targetSdk 34
             }
             lint {
                 checkDependencies true

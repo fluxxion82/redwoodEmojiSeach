@@ -1,0 +1,11 @@
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+
+dependencies {
+  api project(":schema:widget")
+  implementation libs.redwood.widget.compose
+  implementation libs.jetbrains.compose.material
+  implementation libs.jetbrains.compose.ui
+  implementation libs.jetbrains.compose.ui.tooling.preview
+  implementation libs.coil.compose
+}

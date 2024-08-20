@@ -15,15 +15,22 @@
  */
 package com.example.redwood.emojisearch.ios
 
+import app.cash.redwood.treehouse.EventListener
 import app.cash.redwood.treehouse.TreehouseApp
 import app.cash.redwood.treehouse.TreehouseAppFactory
+import app.cash.zipline.Zipline
+import app.cash.zipline.ZiplineManifest
 import app.cash.zipline.loader.ManifestVerifier
 import app.cash.zipline.loader.asZiplineHttpClient
+import app.cash.zipline.loader.withDevelopmentServerPush
 import com.example.redwood.emojisearch.launcher.EmojiSearchAppSpec
 import com.example.redwood.emojisearch.treehouse.EmojiSearchPresenter
 import com.example.redwood.emojisearch.treehouse.HostApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.flowOf
+import platform.Foundation.NSLog
+import platform.Foundation.NSOperationQueue
 import platform.Foundation.NSURLSession
 
 class EmojiSearchLauncher(
@@ -34,22 +41,49 @@ class EmojiSearchLauncher(
   private val manifestUrl = "http://localhost:8080/manifest.zipline.json"
 
   @Suppress("unused") // Invoked in Swift.
-  fun createTreehouseApp(): TreehouseApp<EmojiSearchPresenter> {
+  fun createTreehouseApp(listener: EmojiSearchEventListener): TreehouseApp<EmojiSearchPresenter> {
+    val ziplineHttpClient = nsurlSession.asZiplineHttpClient()
+
+    val eventListener = object : EventListener() {
+      override fun codeLoadFailed(exception: Exception, startValue: Any?) {
+        NSLog("Treehouse: codeLoadFailed: $exception")
+        NSOperationQueue.mainQueue.addOperationWithBlock {
+          listener.codeLoadFailed()
+        }
+      }
+
+      override fun codeLoadSuccess(manifest: ZiplineManifest, zipline: Zipline, startValue: Any?) {
+        NSLog("Treehouse: codeLoadSuccess")
+        NSOperationQueue.mainQueue.addOperationWithBlock {
+          listener.codeLoadSuccess()
+        }
+      }
+    }
+
     val treehouseAppFactory = TreehouseAppFactory(
-      httpClient = nsurlSession.asZiplineHttpClient(),
+      httpClient = ziplineHttpClient,
       manifestVerifier = ManifestVerifier.Companion.NO_SIGNATURE_CHECKS,
     )
+
+    val manifestUrlFlow = flowOf(manifestUrl)
+      .withDevelopmentServerPush(ziplineHttpClient)
 
     val treehouseApp = treehouseAppFactory.create(
       appScope = coroutineScope,
       spec = EmojiSearchAppSpec(
-        manifestUrlString = manifestUrl,
+        manifestUrl = manifestUrlFlow,
         hostApi = hostApi,
       ),
+      eventListenerFactory = { app, manifestUrl -> eventListener },
     )
 
     treehouseApp.start()
 
     return treehouseApp
   }
+}
+
+interface EmojiSearchEventListener {
+  fun codeLoadFailed()
+  fun codeLoadSuccess()
 }

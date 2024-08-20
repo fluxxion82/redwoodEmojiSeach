@@ -7,12 +7,13 @@ kotlin {
   js {
     browser()
   }
+  jvm()
 
   sourceSets {
     commonMain {
       dependencies {
         api libs.redwood.layout.compose
-        api libs.redwood.treehouse.lazylayout.compose
+        api libs.redwood.lazylayout.compose
         api project(":schema:widget")
       }
     }
@@ -20,6 +21,6 @@ kotlin {
 }
 
 redwoodSchema {
-  source = project(":schema") // projects.samples.emojiSearch.schema
+  source = project(":schema")
   type = 'com.example.redwood.emojisearch.EmojiSearch'
 }
